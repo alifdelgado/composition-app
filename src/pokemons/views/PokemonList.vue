@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { getPokemons } from '../helpers/get-pokemons'
-import type { Pokemon } from '../interfaces/pokemon.interface'
+import PokemonCardList from '../components/PokemonCardList.vue'
+import usePokemons from '../composables/usePokemons'
 
-const data = await getPokemons()
-const pokemons = ref<Pokemon[]>(data)
-// getPokemons().then((data) => (pokemons.value = data))
+const { isLoading, count, pokemons, isError, error } = usePokemons()
 </script>
 <template>
-  <div>Pokemon list</div>
-  <ul>
-    <li v-for="pokemon in pokemons" :key="pokemon.id">{{ pokemon.name }}</li>
-  </ul>
+  <h3 class="text-xl" v-if="isLoading">Loading...</h3>
+  <div v-else-if="isError">{{ error }}</div>
+  <div v-else>
+    <h1 class="py-5 text-3xl font-semibold text-center text-gray-600">
+      Pokemon list - {{ count }}
+    </h1>
+    <PokemonCardList :pokemons="pokemons!" />
+  </div>
 </template>

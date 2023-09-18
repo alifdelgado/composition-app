@@ -18,6 +18,7 @@ const routeLinks: RouterLink[] =
   <div class="h-screen max-w-5xl mx-auto">
     <Suspense>
       <RouterView />
+      <template #fallback>Loading...</template>
     </Suspense>
   </div>
 </template>
