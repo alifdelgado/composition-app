@@ -1,5 +1,14 @@
 <script setup lang="ts">
+import { useQuery } from '@tanstack/vue-query'
 import store from '@/store/pokemon.store'
+import PokemonCardList from '../components/PokemonCardList.vue'
+import { getPokemons } from '../helpers/get-pokemons'
+
+useQuery(['pokemons'], getPokemons, {
+  select(data) {
+    store.loadedPokemons(data)
+  }
+})
 </script>
 <template>
   <h3 class="text-xl" v-if="store.pokemons.isLoading">Loading...</h3>

@@ -1,5 +1,6 @@
-import type { Pokemon } from '@/pokemons/interfaces'
 import { reactive } from 'vue'
+import { getPokemons } from '@/pokemons/helpers/get-pokemons'
+import type { Pokemon } from '@/pokemons/interfaces'
 
 interface Store {
   pokemons: {
@@ -9,7 +10,7 @@ interface Store {
     hasError: boolean
     errorMessage: string
   }
-  startLoadingPokemons: () => void
+  startLoadingPokemons: () => Promise<void>
   loadedPokemons: (pokemons: Pokemon[]) => void
   loadPokemonsFailed: (errorMessage: string) => void
 }
@@ -22,9 +23,31 @@ const store = reactive<Store>({
     hasError: false,
     errorMessage: ''
   },
-  startLoadingPokemons: (): void => {},
-  loadedPokemons: (pokemons: Pokemon[]): void => {},
-  loadPokemonsFailed: (errorMessage: string): void => {}
+  startLoadingPokemons: async function (): Promise<void> {
+    this.pokemons = {
+      ...this.pokemons,
+      isLoading: true,
+      hasError: false,
+      errorMessage: ''
+    }
+  },
+  loadedPokemons: function (data: Pokemon[]): void {
+    this.pokemons = {
+      list: data,
+      count: data.length,
+      isLoading: false,
+      hasError: false,
+      errorMessage: ''
+    }
+  },
+  loadPokemonsFailed: function (errorMessage: string): void {
+    this.pokemons = {
+      ...this.pokemons,
+      isLoading: false,
+      hasError: true,
+      errorMessage
+    }
+  }
 })
 
 export default store
