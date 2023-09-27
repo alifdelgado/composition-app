@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { RouterLink } from '@/router/list-routes'
 
 interface Props {
@@ -6,10 +7,13 @@ interface Props {
   links: RouterLink[]
   isSecondary?: boolean
 }
-const { title, isSecondary } = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   title: 'PokemonApp',
   isSecondary: false
 })
+
+const { title, isSecondary } = props
+const links = computed(() => props.links.filter((link) => link.visible))
 </script>
 <template>
   <nav class="bg-gray-800">
@@ -22,7 +26,7 @@ const { title, isSecondary } = withDefaults(defineProps<Props>(), {
       </RouterLink>
       <div class="flex items-center">
         <ul class="flex flex-row mt-0 mr-6 space-x-8 text-sm font-medium">
-          <li v-for="link in $props.links" :key="link.path">
+          <li v-for="link in links" :key="link.path">
             <RouterLink :to="link.path" class="font-bold text-green-800 hover:underline">{{
               link.title
             }}</RouterLink>

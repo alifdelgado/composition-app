@@ -1,17 +1,26 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import type { Pokemon } from '../interfaces'
+import { useQueryClient } from '@tanstack/vue-query'
+import { getPokemon } from '../helpers/get-pokemons'
 
 interface Props {
   pokemon: Pokemon
 }
 
 const { pokemon } = defineProps<Props>()
-
 const router = useRouter()
+const queryClien = useQueryClient()
 
 const goto = () => {
   router.push({ name: 'single-pokemon', params: { id: pokemon.id } })
+}
+
+const prefetchPokemon = () => {
+  queryClien.prefetchQuery({
+    queryKey: ['pokemon', pokemon.id],
+    queryFn: () => getPokemon(pokemon.id.toString())
+  })
 }
 </script>
 <template>

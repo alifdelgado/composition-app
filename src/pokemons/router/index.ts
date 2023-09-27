@@ -10,7 +10,7 @@ export const pokemonRoute: RouteRecordRaw = {
   children: [
     {
       path: `/${ROUTE_NAME}/:id`,
-      props: { title: 'Pokemon by id' },
+      props: { title: 'Pokemon by id', visible: false },
       name: 'single-pokemon',
       component: () => import('@/pokemons/views/SinglePokemon.vue')
     },
